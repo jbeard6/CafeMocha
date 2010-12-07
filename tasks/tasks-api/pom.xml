@@ -3,23 +3,23 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>net.sf</groupId>
-		<artifactId>cafemocha</artifactId>
+		<groupId>net.sf.cafemocha</groupId>
+		<artifactId>tasks</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>net.sf.cafemocha</groupId>
-	<artifactId>tasks</artifactId>
+	<groupId>net.sf.cafemocha.tasks</groupId>
+	<artifactId>tasks-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Tasks</name>
-	<description>Café Mocha Tasks Utilities</description>
+	<name>Tasks API</name>
+	<description>Café Mocha Tasks API</description>
 
 	<scm>
-		<connection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/tasks</connection>
-		<developerConnection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/tasks</developerConnection>
-		<url>http://cafemocha.svn.sourceforge.net/viewvc/cafemocha/trunk/tasks</url>
+		<connection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/tasks/tasks-api</connection>
+		<developerConnection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/tasks/tasks-api</developerConnection>
+		<url>http://cafemocha.svn.sourceforge.net/viewvc/cafemocha/trunk/tasks/tasks-api</url>
 	</scm>
 
 	<dependencies>

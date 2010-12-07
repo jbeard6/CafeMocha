@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>net.sf</groupId>
-		<artifactId>cafemocha</artifactId>
+		<groupId>net.sf.cafemocha</groupId>
+		<artifactId>persistence</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>net.sf.cafemocha</groupId>
-	<artifactId>persistence</artifactId>
+	<groupId>net.sf.cafemocha.persistence</groupId>
+	<artifactId>persistence-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -17,16 +17,12 @@
 	<description>Café Mocha Persistence Utilities</description>
 	
 	<scm>
-		<connection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/persistence</connection>
-		<developerConnection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/persistence</developerConnection>
-		<url>http://cafemocha.svn.sourceforge.net/viewvc/cafemocha/trunk/persistence</url>
+		<connection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/persistence/persistence-api</connection>
+		<developerConnection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/persistence/persistence-api</developerConnection>
+		<url>http://cafemocha.svn.sourceforge.net/viewvc/cafemocha/trunk/persistence/persistence-api</url>
 	</scm>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
