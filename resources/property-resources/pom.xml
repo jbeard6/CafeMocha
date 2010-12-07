@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>net.sf.cafemocha</groupId>
+		<artifactId>resources</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>net.sf.cafemocha.resources</groupId>
+	<artifactId>property-resources</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>Property Resources</name>
+	<description>Implementations of the Resources API for working with resources defined in property bundles.</description>
+
+	<scm>
+		<connection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/resources/property-resources</connection>
+		<developerConnection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/resources/property-resources</developerConnection>
+		<url>http://cafemocha.svn.sourceforge.net/viewvc/cafemocha/trunk/resources/property-resources</url>
+	</scm>
+	
+	<dependencies>
+		<dependency>
+			<groupId>net.sf.cafemocha.resources</groupId>
+			<artifactId>resources-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

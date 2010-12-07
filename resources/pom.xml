@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>net.sf</groupId>
+		<artifactId>cafemocha</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>net.sf.cafemocha</groupId>
+	<artifactId>resources</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Resources</name>
+	<description>Café Mocha Resources Utilities</description>
+
+	<scm>
+		<connection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/resources</connection>
+		<developerConnection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/resources</developerConnection>
+		<url>http://cafemocha.svn.sourceforge.net/viewvc/cafemocha/trunk/resources</url>
+	</scm>
+
+	<modules>
+		<module>resources-api</module>
+		<module>property-resources</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.sf.cafemocha.resources</groupId>
+				<artifactId>resources-api</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.cafemocha.resources</groupId>
+				<artifactId>property-resources</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>

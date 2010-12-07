@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>net.sf.cafemocha</groupId>
+		<artifactId>resources</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>net.sf.cafemocha.resources</groupId>
+	<artifactId>resources-api</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>Resources API</name>
+	<description>API for working with resources implementations within the Café Mocha libraries.</description>
+
+	<scm>
+		<connection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/resources/resources-api</connection>
+		<developerConnection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/resources/resources-api</developerConnection>
+		<url>http://cafemocha.svn.sourceforge.net/viewvc/cafemocha/trunk/resources/resources-api</url>
+	</scm>
+	
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
+</project>

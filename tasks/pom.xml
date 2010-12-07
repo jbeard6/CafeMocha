@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>net.sf</groupId>
+		<artifactId>cafemocha</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>net.sf.cafemocha</groupId>
+	<artifactId>tasks</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>Tasks</name>
+	<description>Café Mocha Tasks Utilities</description>
+
+	<scm>
+		<connection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/tasks</connection>
+		<developerConnection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/tasks</developerConnection>
+		<url>http://cafemocha.svn.sourceforge.net/viewvc/cafemocha/trunk/tasks</url>
+	</scm>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.sf.cafemocha</groupId>
+			<artifactId>beans</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
