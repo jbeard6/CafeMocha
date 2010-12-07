@@ -32,12 +32,12 @@
 			<artifactId>resources-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.cafemocha</groupId>
-			<artifactId>persistence</artifactId>
+			<groupId>net.sf.cafemocha.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.cafemocha</groupId>
-			<artifactId>tasks</artifactId>
+			<groupId>net.sf.cafemocha.tasks</groupId>
+			<artifactId>tasks-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

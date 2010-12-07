@@ -28,22 +28,6 @@
 			<artifactId>application</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.cafemocha</groupId>
-			<artifactId>beans</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.cafemocha.resources</groupId>
-			<artifactId>resources-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.cafemocha</groupId>
-			<artifactId>persistence</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.cafemocha</groupId>
-			<artifactId>tasks</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>

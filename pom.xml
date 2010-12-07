@@ -70,13 +70,18 @@
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>net.sf.cafemocha</groupId>
-				<artifactId>persistence</artifactId>
+				<groupId>net.sf.cafemocha.persistence</groupId>
+				<artifactId>persistence-api</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>net.sf.cafemocha</groupId>
-				<artifactId>tasks</artifactId>
+				<groupId>net.sf.cafemocha.tasks</groupId>
+				<artifactId>tasks-api</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.cafemocha.validation</groupId>
+				<artifactId>validation-api</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>

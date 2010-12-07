@@ -13,8 +13,8 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Persistence</name>
-	<description>Café Mocha Persistence Utilities</description>
+	<name>Persistence API</name>
+	<description>Café Mocha Persistence API</description>
 	
 	<scm>
 		<connection>scm:svn:https://cafemocha.svn.sourceforge.net/svnroot/cafemocha/trunk/persistence/persistence-api</connection>
