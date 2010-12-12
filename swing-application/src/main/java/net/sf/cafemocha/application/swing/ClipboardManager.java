@@ -11,10 +11,9 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 
 /**
- * Manages access to the system {@link Clipboard} by the
- * {@link SwingApplication}.
+ * Manages access to the {@link Clipboard} by the {@link SwingApplication}.
  * 
- * @author joseph
+ * @author computerguy5
  * 
  */
 public class ClipboardManager {
@@ -25,12 +24,38 @@ public class ClipboardManager {
 	 * 
 	 * @throws HeadlessException
 	 *             if the application is not running in a graphical environment
+	 * @see Toolkit#getSystemClipboard()
 	 */
-	public ClipboardManager() throws HeadlessException {
-		// TODO Check for security manager
-		this.clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+	public static ClipboardManager systemClipboardManager()
+			throws HeadlessException {
+		// TODO Check for security manager?
+		return new ClipboardManager(Toolkit.getDefaultToolkit()
+				.getSystemClipboard());
 	}
 
-	private Clipboard clipboard;
+	/**
+	 * Construct a new {@link ClipboardManager manager} for the specified
+	 * {@link Clipboard}.
+	 * 
+	 * @param clipboard
+	 *            the clipboard to be managed
+	 * @throws NullPointerException
+	 *             if <code>clipboard</code> is <code>null</code>
+	 */
+	public ClipboardManager(Clipboard clipboard) {
+		if (clipboard == null) {
+			throw new NullPointerException("clipboard");
+		}
+		this.clipboard = clipboard;
+	}
+
+	private final Clipboard clipboard;
+
+	/**
+	 * @return the clipboard
+	 */
+	public Clipboard getClipboard() {
+		return clipboard;
+	}
 
 }
