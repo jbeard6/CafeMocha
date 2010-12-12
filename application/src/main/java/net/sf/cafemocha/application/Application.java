@@ -27,8 +27,7 @@ public abstract class Application extends AbstractObservable {
 
 	public Application() {
 		this.exitListeners = new CopyOnWriteArrayList<ExitListener>();
-		// TBD Can't genericize AppContext if initialized here
-		this.context = new ApplicationContext<Application>(this);
+		this.context = new ApplicationContext(this);
 	}
 
 	private final List<ExitListener> exitListeners;
