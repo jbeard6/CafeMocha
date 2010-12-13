@@ -39,17 +39,27 @@ public class ApplicationContext extends AbstractObservable {
 	private ResourceManager resourceManager;
 
 	/**
-	 * @return the resourceManager
+	 * Returns the {@link ResourceManager} in use by this
+	 * {@link ApplicationContext}.
+	 * 
+	 * @return the resource manager
 	 */
 	public ResourceManager getResourceManager() {
 		return resourceManager;
 	}
 
 	/**
+	 * Set the {@link ResourceManager} used by this {@link ApplicationContext}.
+	 * 
 	 * @param resourceManager
-	 *            the resourceManager to set
+	 *            the resource manager to set
+	 * @throws NullPointerException
+	 *             if <code>resourceManager</code> is <code>null</code>
 	 */
 	public void setResourceManager(ResourceManager resourceManager) {
+		if (resourceManager == null) {
+			throw new NullPointerException("resourceManager");
+		}
 		ResourceManager oldValue = this.resourceManager;
 		this.resourceManager = resourceManager;
 		firePropertyChange(RESOURCE_MANAGER_PROPERTY, oldValue, resourceManager);
@@ -60,17 +70,27 @@ public class ApplicationContext extends AbstractObservable {
 	private StorageManager storageManager;
 
 	/**
-	 * @return the storageManager
+	 * Returns the {@link StorageManager} used by this
+	 * {@link ApplicationContext}.
+	 * 
+	 * @return the storage manager
 	 */
 	public StorageManager getStorageManager() {
 		return storageManager;
 	}
 
 	/**
+	 * Sets the {@link StorageManager} used by this {@link ApplicationContext}.
+	 * 
 	 * @param storageManager
-	 *            the storageManager to set
+	 *            the storage manager to set
+	 * @throws NullPointerException
+	 *             if <code>storageManager</code> is <code>null</code>
 	 */
 	public void setStorageManager(StorageManager storageManager) {
+		if (storageManager == null) {
+			throw new NullPointerException("storageManager");
+		}
 		StorageManager oldValue = this.storageManager;
 		this.storageManager = storageManager;
 		firePropertyChange(STORAGE_MANAGER_PROPERTY, oldValue, storageManager);
@@ -81,17 +101,26 @@ public class ApplicationContext extends AbstractObservable {
 	private TaskService taskService;
 
 	/**
-	 * @return the taskService
+	 * Returns the {@link TaskService} used by this {@link ApplicationContext}.
+	 * 
+	 * @return the task service
 	 */
 	public TaskService getTaskService() {
 		return taskService;
 	}
 
 	/**
+	 * Sets the {@link TaskService} used by this {@link ApplicationContext}.
+	 * 
 	 * @param taskService
-	 *            the taskService to set
+	 *            the task service to set
+	 * @throws NullPointerException
+	 *             if <code>taskService</code> is <code>null</code>
 	 */
 	public void setTaskService(TaskService taskService) {
+		if (taskService == null) {
+			throw new NullPointerException("taskService");
+		}
 		TaskService oldValue = this.taskService;
 		this.taskService = taskService;
 		firePropertyChange(TASK_SERVICE_PROPERTY, oldValue, taskService);
