@@ -27,6 +27,17 @@ public abstract class Application extends AbstractObservable {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(Application.class);
 
+	private static Application application;
+
+	/**
+	 * Returns the executing {@link Application}.
+	 * 
+	 * @return the executing application
+	 */
+	public static Application getApplication() {
+		return application;
+	}
+
 	public Application() {
 		this.context = new ApplicationContext(this);
 		this.exitListeners = new CopyOnWriteArrayList<ExitListener>();
@@ -80,7 +91,7 @@ public abstract class Application extends AbstractObservable {
 	 * @param event
 	 *            the event that triggered the shutdown
 	 */
-	public void exit(EventObject event) {
+	public final void exit(EventObject event) {
 		// Verify that the application is allowed to exit
 		for (ExitListener exitListener : exitListeners) {
 			if (!exitListener.canExit(event)) {
@@ -112,10 +123,46 @@ public abstract class Application extends AbstractObservable {
 		}
 	}
 
-	public void initialize(String... arguments) {
+	public final void launch(String... arguments) {
+		if (application == null) {
+			// TODO Launch the application lifecycle
+		} else if (application != this) {
+			// A different application is currently running
+			throw new IllegalStateException(
+					"Another application is already executing.");
+		}
+	}
+
+	/**
+	 * Responsible for initializations that must occur before the application
+	 * {@link #startup() starts up}. This method is called by the
+	 * {@link #launch()} method. The supplied arguments are generally the
+	 * arguments to the <code>main</code> method.
+	 * 
+	 * @param arguments
+	 *            the application arguments
+	 */
+	protected void initialize(String... arguments) {
 		// Initialize the application
 	}
 
+	/**
+	 * Starts the application and creates the initial user interface. This
+	 * method is called by the {@link #launch()} method.
+	 */
+	public abstract void startup();
+
+	/**
+	 * Performs any last minute work required after the application has launched
+	 * but before the user has touched it.
+	 */
+	public void ready() {
+	}
+
+	/**
+	 * Performs last minute clean up immediately prior to JVM termination via
+	 * the {@link #exit(EventObject)} method.
+	 */
 	protected void shutdown() {
 		// Subclasses may override to clean up immediately prior to shutdown
 	}
