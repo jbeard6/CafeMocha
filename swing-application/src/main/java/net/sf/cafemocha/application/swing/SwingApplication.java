@@ -14,7 +14,7 @@ import net.sf.cafemocha.application.Application;
  * @author computerguy5
  * 
  */
-public class SwingApplication extends Application {
+public abstract class SwingApplication extends Application {
 
 	/*
 	 * Convenience method that returns the covariant SwingApplicationContext.
