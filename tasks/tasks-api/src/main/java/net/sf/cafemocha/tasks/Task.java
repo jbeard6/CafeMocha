@@ -151,7 +151,7 @@ public abstract class Task<T> extends AbstractObservable {
 		}
 	}
 
-	private ExecutionState state = ExecutionState.PENDING;
+	private volatile ExecutionState state = ExecutionState.PENDING;
 
 	/**
 	 * Returns the {@link ExecutionState} of the {@link Task}.
@@ -254,7 +254,7 @@ public abstract class Task<T> extends AbstractObservable {
 	 * percentage. In other words, a value of <code>58</code> is interpreted as
 	 * <code>58%</code>.
 	 */
-	private int progress;
+	private volatile int progress;
 
 	/**
 	 * Returns the execution progress of this {@link Task} as a percentage. In
