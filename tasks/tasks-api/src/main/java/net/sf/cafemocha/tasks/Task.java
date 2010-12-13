@@ -53,8 +53,8 @@ public abstract class Task<T> extends AbstractObservable {
 			this.taskService = taskService;
 		}
 
-		firePropertyChange("taskService", oldValue, taskService);
 		LOG.debug("taskService: {}", taskService);
+		firePropertyChange("taskService", oldValue, taskService);
 	}
 
 	private final List<TaskListener<? super T>> listeners = new CopyOnWriteArrayList<TaskListener<? super T>>();
@@ -162,11 +162,11 @@ public abstract class Task<T> extends AbstractObservable {
 		return state;
 	}
 
-	protected void setState(ExecutionState state) {
+	protected final void setState(ExecutionState state) {
 		ExecutionState oldValue = this.state;
 		this.state = state;
-		firePropertyChange("state", oldValue, state);
 		LOG.debug("state: {}", state);
+		firePropertyChange("state", oldValue, state);
 	}
 
 	/**
@@ -248,4 +248,107 @@ public abstract class Task<T> extends AbstractObservable {
 	 *             if an error occurs while executing the task
 	 */
 	protected abstract T execute() throws Exception;
+
+	/**
+	 * The execution progress of the {@link Task}. This is considered to be a
+	 * percentage. In other words, a value of <code>58</code> is interpreted as
+	 * <code>58%</code>.
+	 */
+	private int progress;
+
+	/**
+	 * Returns the execution progress of this {@link Task} as a percentage. In
+	 * other words, a value of <code>58</code> is interpreted as
+	 * <code>58%</code>.
+	 * 
+	 * @return progress of execution
+	 */
+	public int getProgress() {
+		return progress;
+	}
+
+	/**
+	 * Set the execution progress of this {@link Task}.
+	 * 
+	 * @param progress
+	 *            the progress (percentage) of the task execution
+	 */
+	protected final void setProgress(int progress) {
+		if (progress < 0 || progress > 100) {
+			throw new IllegalArgumentException(
+					"progress out of range: 0 <= progress <= 100");
+		}
+
+		int oldValue = this.progress;
+		this.progress = progress;
+		LOG.debug("progress: {}", progress);
+		firePropertyChange("progress", oldValue, progress);
+	}
+
+	/**
+	 * A convenience method that sets the {@code progress} property to the
+	 * following ratio normalized to 0 .. 100.
+	 * 
+	 * <pre>
+	 * value - min / max - min
+	 * </pre>
+	 * 
+	 * @param value
+	 *            a value in the range min ... max, inclusive
+	 * @param min
+	 *            the minimum value of the range
+	 * @param max
+	 *            the maximum value of the range
+	 * @see #setProgress(int)
+	 */
+	protected final void setProgress(int value, int min, int max) {
+		if (min >= max) {
+			throw new IllegalArgumentException("invalid range: min >= max");
+		} else if ((value < min) || (value > max)) {
+			throw new IllegalArgumentException("invalid value");
+		}
+		float percentage = (float) (value - min) / (float) (max - min);
+		setProgress(Math.round(percentage * 100.0f));
+	}
+
+	/**
+	 * A convenience method that sets the {@code progress} property to
+	 * <code>percentage * 100</code>.
+	 * 
+	 * @param percentage
+	 *            a value in the range 0.0 ... 1.0 inclusive
+	 * @see #setProgress(int)
+	 */
+	protected final void setProgress(float percentage) {
+		if ((percentage < 0.0) || (percentage > 1.0)) {
+			throw new IllegalArgumentException("invalid percentage");
+		}
+		setProgress(Math.round(percentage * 100.0f));
+	}
+
+	/**
+	 * A convenience method that sets the {@code progress} property to the
+	 * following ratio normalized to 0 .. 100.
+	 * 
+	 * <pre>
+	 * value - min / max - min
+	 * </pre>
+	 * 
+	 * @param value
+	 *            a value in the range min ... max, inclusive
+	 * @param min
+	 *            the minimum value of the range
+	 * @param max
+	 *            the maximum value of the range
+	 * @see #setProgress(int)
+	 */
+	protected final void setProgress(float value, float min, float max) {
+		if (min >= max) {
+			throw new IllegalArgumentException("invalid range: min >= max");
+		} else if ((value < min) || (value > max)) {
+			throw new IllegalArgumentException("invalid value");
+		}
+		float percentage = (value - min) / (max - min);
+		setProgress(Math.round(percentage * 100.0f));
+	}
 }
