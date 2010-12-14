@@ -125,7 +125,13 @@ public abstract class Application extends AbstractObservable {
 
 	public final void launch(String... arguments) {
 		if (application == null) {
-			// TODO Launch the application lifecycle
+			application = this;
+
+			// TODO Allow more control over launch, such as launching on EDT
+			// Launch the application lifecycle
+			application.initialize(arguments);
+			application.startup();
+			application.ready();
 		} else if (application != this) {
 			// A different application is currently running
 			throw new IllegalStateException(
@@ -150,13 +156,13 @@ public abstract class Application extends AbstractObservable {
 	 * Starts the application and creates the initial user interface. This
 	 * method is called by the {@link #launch()} method.
 	 */
-	public abstract void startup();
+	protected abstract void startup();
 
 	/**
 	 * Performs any last minute work required after the application has launched
 	 * but before the user has touched it.
 	 */
-	public void ready() {
+	protected void ready() {
 	}
 
 	/**
