@@ -27,7 +27,7 @@ public abstract class Application extends AbstractObservable {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(Application.class);
 
-	private static Application application;
+	private static Application runningApplication;
 
 	/**
 	 * Returns the executing {@link Application}.
@@ -35,7 +35,23 @@ public abstract class Application extends AbstractObservable {
 	 * @return the executing application
 	 */
 	public static Application getApplication() {
-		return application;
+		return runningApplication;
+	}
+
+	/**
+	 * Sets the currently executing application
+	 * 
+	 * @param application
+	 * @return
+	 */
+	protected static synchronized void initApplication(Application application) {
+		if (runningApplication == null) {
+			runningApplication = application;
+		} else {
+			// An application has already been set
+			throw new IllegalStateException(
+					"An application is already executing.");
+		}
 	}
 
 	public Application() {
@@ -123,20 +139,24 @@ public abstract class Application extends AbstractObservable {
 		}
 	}
 
+	/**
+	 * Launch the specified {@link Application}. This call does nothing if the
+	 * specified {@link Application} is already running.
+	 * 
+	 * @param application
+	 *            the application to be launched
+	 * @param arguments
+	 *            the initialization arguments for the application
+	 * @throws IllegalStateException
+	 *             if another application is already executing
+	 */
 	public final void launch(String... arguments) {
-		if (application == null) {
-			application = this;
+		initApplication(this);
 
-			// TODO Allow more control over launch, such as launching on EDT
-			// Launch the application lifecycle
-			application.initialize(arguments);
-			application.startup();
-			application.ready();
-		} else if (application != this) {
-			// A different application is currently running
-			throw new IllegalStateException(
-					"Another application is already executing.");
-		}
+		// Launch the application lifecycle
+		initialize(arguments);
+		startup();
+		ready();
 	}
 
 	/**
