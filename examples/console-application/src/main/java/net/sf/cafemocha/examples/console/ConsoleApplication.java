@@ -6,8 +6,12 @@
  */
 package net.sf.cafemocha.examples.console;
 
+import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import net.sf.cafemocha.application.Application;
 import net.sf.cafemocha.tasks.Task;
@@ -28,14 +32,20 @@ import net.sf.cafemocha.tasks.Task;
  */
 public class ConsoleApplication extends Application {
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		final ConsoleApplication application = new ConsoleApplication();
 		application.launch(args);
 
-		// TODO invoke exit later
-		while (true) {
-			application.exit(null);
-		}
+		ScheduledExecutorService service = newSingleThreadScheduledExecutor();
+
+		Runnable exitCommand = new Runnable() {
+			public void run() {
+				application.exit(null);
+			}
+		};
+
+		// Prompt for exit every 5 seconds until terminated
+		service.scheduleAtFixedRate(exitCommand, 10L, 5L, TimeUnit.SECONDS);
 	}
 
 	public ConsoleApplication() {
