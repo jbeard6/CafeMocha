@@ -6,7 +6,15 @@
  */
 package net.sf.cafemocha.application.swing;
 
+import static java.awt.EventQueue.invokeAndWait;
+import static java.awt.EventQueue.isDispatchThread;
+
+import java.lang.reflect.InvocationTargetException;
+
 import net.sf.cafemocha.application.Application;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A simple application lifecycle for a Swing application.
@@ -15,6 +23,9 @@ import net.sf.cafemocha.application.Application;
  * 
  */
 public abstract class SwingApplication extends Application {
+
+	private static final Logger LOG = LoggerFactory
+			.getLogger(SwingApplication.class);
 
 	/*
 	 * Convenience method that returns the covariant SwingApplicationContext.
@@ -25,6 +36,51 @@ public abstract class SwingApplication extends Application {
 	public SwingApplicationContext getContext() {
 		// TODO Enforce safety of cast through constructor
 		return (SwingApplicationContext) super.getContext();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see net.sf.cafemocha.application.Application#launch(java.lang.String[])
+	 */
+	@Override
+	public final void launch(String... arguments) {
+		initApplication(this);
+
+		// Initialize the application on calling thread
+		initialize(arguments);
+
+		// Start the application on the event dispatching thread
+		if (isDispatchThread()) {
+			launchOnEdt();
+		} else {
+			Runnable edtLaunch = new Runnable() {
+				public void run() {
+					launchOnEdt();
+				}
+			};
+
+			try {
+				// Re-dispatch on EDT
+				invokeAndWait(edtLaunch);
+			} catch (InterruptedException ex) {
+				LOG.error("Application Launch Interrupted", ex);
+				// Send back to calling thread
+				throw new RuntimeException("Application Launch Interrupted", ex);
+			} catch (InvocationTargetException ex) {
+				// An uncaught exception occurred in launch
+				// Send back to calling thread
+				throw new RuntimeException("Application Launch Error", ex);
+			}
+		}
+	}
+
+	private void launchOnEdt() {
+		// Launch the application lifecycle
+		startup();
+
+		// TODO Wait for empty event queue before sending ready event
+		ready();
 	}
 
 	// TODO Add Look and Feel, Window location preferences, etc.
