@@ -24,6 +24,7 @@
 
 	<modules>
 		<module>console-application</module>
+		<module>swing-application</module>
 	</modules>
 
 	<dependencyManagement>
