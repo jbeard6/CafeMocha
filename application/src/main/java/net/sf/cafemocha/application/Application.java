@@ -150,7 +150,7 @@ public abstract class Application extends AbstractObservable {
 	 * @throws IllegalStateException
 	 *             if another application is already executing
 	 */
-	public final void launch(String... arguments) {
+	public void launch(String... arguments) {
 		initApplication(this);
 
 		// Launch the application lifecycle
