@@ -27,6 +27,11 @@ public abstract class SwingApplication extends Application {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(SwingApplication.class);
 
+	@Override
+	protected SwingApplicationContext createContext() {
+		return new SwingApplicationContext(this);
+	}
+
 	/*
 	 * Convenience method that returns the covariant SwingApplicationContext.
 	 * 
@@ -34,15 +39,10 @@ public abstract class SwingApplication extends Application {
 	 */
 	@Override
 	public SwingApplicationContext getContext() {
-		// TODO Enforce safety of cast through constructor
+		// Cast safety is enforced via createContext()
 		return (SwingApplicationContext) super.getContext();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see net.sf.cafemocha.application.Application#launch(java.lang.String[])
-	 */
 	@Override
 	public final void launch(String... arguments) {
 		initApplication(this);
