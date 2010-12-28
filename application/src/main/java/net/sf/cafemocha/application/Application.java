@@ -42,7 +42,9 @@ public abstract class Application extends AbstractObservable {
 	 * Sets the currently executing application
 	 * 
 	 * @param application
-	 * @return
+	 *            the application being launched
+	 * @throws IllegalStateException
+	 *             if an application has already been launched
 	 */
 	protected static synchronized void initApplication(Application application) {
 		if (runningApplication == null) {
@@ -55,13 +57,28 @@ public abstract class Application extends AbstractObservable {
 	}
 
 	public Application() {
-		this.context = new ApplicationContext(this);
+		this.context = createContext();
 		this.exitListeners = new CopyOnWriteArrayList<ExitListener>();
 	}
 
-	/* TODO Figure out how to initialize a proper context */
 	private final ApplicationContext context;
 
+	/**
+	 * Construct an appropriate {@link ApplicationContext} for this
+	 * {@link Application}. Subclasses may override this to construct a
+	 * specialized {@link ApplicationContext context}.
+	 * 
+	 * @return an appropriate context for this application
+	 */
+	protected ApplicationContext createContext() {
+		return new ApplicationContext(this);
+	}
+
+	/**
+	 * Returns the {@link ApplicationContext} for this {@link Application}.
+	 * 
+	 * @return the context for this application
+	 */
 	public ApplicationContext getContext() {
 		return context;
 	}
@@ -111,7 +128,7 @@ public abstract class Application extends AbstractObservable {
 		// Verify that the application is allowed to exit
 		for (ExitListener exitListener : exitListeners) {
 			if (!exitListener.canExit(event)) {
-				// Vetoed exit
+				// Exit vetoed
 				return;
 			}
 		}
