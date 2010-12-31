@@ -7,6 +7,7 @@
 package net.sf.cafemocha.application;
 
 import net.sf.cafemocha.beans.AbstractObservable;
+import net.sf.cafemocha.persistence.StorageManager;
 import net.sf.cafemocha.tasks.TaskService;
 
 /**
