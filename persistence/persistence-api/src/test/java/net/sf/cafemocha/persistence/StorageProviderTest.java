@@ -38,7 +38,7 @@ public abstract class StorageProviderTest<T extends StorageProvider> {
 
 	protected abstract T createStorageProvider();
 
-	protected T getStorageProvider() {
+	protected final T getStorageProvider() {
 		return storageProvider;
 	}
 
