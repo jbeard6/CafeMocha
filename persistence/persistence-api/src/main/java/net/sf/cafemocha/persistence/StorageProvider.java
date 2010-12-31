@@ -24,6 +24,8 @@ public interface StorageProvider {
 	 * @param resourceName
 	 *            the name of the resource to open
 	 * @return the resource opened as an input stream
+	 * @throws NullPointerException
+	 *             if the <code>resourceName</code> is <code>null</code>
 	 * @throws IOException
 	 *             if an error occurs while opening the resource
 	 */
@@ -35,10 +37,24 @@ public interface StorageProvider {
 	 * @param resourceName
 	 *            the name of the resource to open
 	 * @return the resource opened as an output stream
+	 * @throws NullPointerException
+	 *             if the <code>resourceName</code> is <code>null</code>
 	 * @throws IOException
 	 *             if an error occurs while opening the resource
 	 */
 	public OutputStream openOutput(String resourceName) throws IOException;
+
+	/**
+	 * Returns <code>true</code> if the resource with the specified
+	 * <code>resourceName</code> exists.
+	 * 
+	 * @param resourceName
+	 *            the name of the resource
+	 * @return <code>true</code> if the resource exists
+	 * @throws IOException
+	 *             if an error occurs while checking if the resource exists
+	 */
+	public boolean exists(String resourceName) throws IOException;
 
 	/**
 	 * Delete the named resource.
@@ -46,6 +62,8 @@ public interface StorageProvider {
 	 * @param resourceName
 	 *            the name of the resource to delete
 	 * @return <code>true</code> if the resource was deleted
+	 * @throws NullPointerException
+	 *             if the <code>resourceName</code> is <code>null</code>
 	 * @throws IOException
 	 *             if an error occurs while attempting to delete the resource
 	 */
