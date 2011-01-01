@@ -4,7 +4,7 @@
  * $LastChangedDate$
  * $LastChangedBy$
  */
-package net.sf.cafemocha.persistence;
+package net.sf.cafemocha.persistence.xml;
 
 import java.beans.ExceptionListener;
 import java.beans.XMLDecoder;
@@ -14,6 +14,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
+
+import net.sf.cafemocha.persistence.StorageManager;
+import net.sf.cafemocha.persistence.StorageProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,17 +71,22 @@ public class XMLStorageManager implements StorageManager {
 		ExceptionHandler exceptionHandler = this.exceptionHandler.get();
 		encoder.setExceptionListener(exceptionHandler);
 
-		encoder.writeObject(object);
-		encoder.close();
+		try {
+			encoder.writeObject(object);
+			encoder.close();
 
-		// Take only the first exception off the list and reset for next time
-		Exception ex = exceptionHandler.getFirstException();
-		exceptionHandler.reset();
+			// Take only the first exception off the list
+			Exception ex = exceptionHandler.getFirstException();
 
-		if (ex != null) {
-			// TODO More specific exception
-			throw (IOException) new IOException("Write Exception")
-					.initCause(ex);
+			if (ex != null) {
+				throw new XMLEncodingException(
+						"Failed to convert object to XML").initCause(ex)
+						.initEncoder(encoder);
+			}
+		} finally {
+			// Reset for next invocation
+			encoder.setExceptionListener(null);
+			exceptionHandler.reset();
 		}
 	}
 
@@ -88,14 +96,31 @@ public class XMLStorageManager implements StorageManager {
 		// Use XMLDecoder to read object
 		XMLDecoder decoder = new XMLDecoder(input, this);
 
-		Object object = decoder.readObject();
-		decoder.close();
+		ExceptionHandler exceptionHandler = this.exceptionHandler.get();
+		decoder.setExceptionListener(exceptionHandler);
 
-		// Will throw a ClassCastException which is permitted by the interface
-		@SuppressWarnings("unchecked")
-		T t = (T) object;
+		try {
+			Object object = decoder.readObject();
+			decoder.close();
 
-		return t;
+			// Take only the first exception off the list
+			Exception ex = exceptionHandler.getFirstException();
+
+			if (ex != null) {
+				throw new XMLDecodingException("Failed to read object from XML")
+						.initCause(ex).initDecoder(decoder);
+			}
+
+			// ClassCastException is permitted by the interface
+			@SuppressWarnings("unchecked")
+			T t = (T) object;
+
+			return t;
+		} finally {
+			// Reset for next invocation
+			decoder.setExceptionListener(null);
+			exceptionHandler.reset();
+		}
 	}
 
 	private static class ExceptionHandler implements ExceptionListener {

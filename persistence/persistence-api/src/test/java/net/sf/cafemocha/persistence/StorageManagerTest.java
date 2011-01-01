@@ -44,7 +44,7 @@ public abstract class StorageManagerTest<T extends StorageManager> {
 	}
 
 	@Test
-	public void testObjectStorage() throws IOException {
+	public void basicObjectStorage() throws IOException {
 		final SimpleBean beanOne = new SimpleBean("beanOne", 1);
 		final SimpleBean beanTwo = new SimpleBean("beanTwo", 2);
 		final ComplexBean complex = new ComplexBean(beanOne, beanTwo);

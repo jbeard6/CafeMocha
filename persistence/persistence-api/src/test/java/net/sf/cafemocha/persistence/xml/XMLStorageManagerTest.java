@@ -4,11 +4,14 @@
  * $LastChangedDate$
  * $LastChangedBy$
  */
-package net.sf.cafemocha.persistence;
+package net.sf.cafemocha.persistence.xml;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.IOException;
+
+import net.sf.cafemocha.persistence.StorageManagerTest;
+import net.sf.cafemocha.persistence.VolatileStorageProvider;
 
 import org.junit.Test;
 
