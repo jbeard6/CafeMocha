@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import net.sf.cafemocha.persistence.StorageManager;
 import net.sf.cafemocha.persistence.StorageProvider;
@@ -116,6 +117,17 @@ public class XMLStorageManager implements StorageManager {
 			T t = (T) object;
 
 			return t;
+		} catch (ArrayIndexOutOfBoundsException ex) {
+			throw new XMLDecodingException("No object defined in resource")
+					.initCause(ex).initDecoder(decoder);
+		} catch (NoSuchElementException ex) {
+			/*
+			 * XMLDecoder Javadoc says ArrayIndexOutOfBounds exception will be
+			 * thrown if no objects are defined, but actual experience indicates
+			 * a NoSuchElementException is thrown.
+			 */
+			throw new XMLDecodingException("No object defined in resource")
+					.initCause(ex).initDecoder(decoder);
 		} finally {
 			// Reset for next invocation
 			decoder.setExceptionListener(null);

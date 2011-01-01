@@ -6,10 +6,16 @@
  */
 package net.sf.cafemocha.persistence.xml;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 
+import net.sf.cafemocha.persistence.SimpleBean;
 import net.sf.cafemocha.persistence.StorageManagerTest;
 import net.sf.cafemocha.persistence.VolatileStorageProvider;
 
@@ -31,11 +37,90 @@ public class XMLStorageManagerTest extends
 		return new XMLStorageManager(storageProvider);
 	}
 
-	@Test(expected = IOException.class)
+	@Test(expected = XMLEncodingException.class)
 	public void invalidObject() throws IOException {
 		final NonBean nonBean = new NonBean("nonBean", 100);
 
 		getStorageManager().writeObject(nonBean, "nonBean");
+	}
+
+	@Test(expected = XMLDecodingException.class)
+	public void corruptDataNonXML() throws IOException {
+		// Write non-xml data
+		OutputStream output = getStorageManager().getStorageProvider()
+				.openOutput("corrupt");
+		PrintWriter writer = new PrintWriter(output);
+
+		writer.println("This is an invalid XML resource.");
+		writer.flush();
+		writer.close();
+
+		// This should throw the exception
+		getStorageManager().readObject("corrupt");
+	}
+
+	@Test
+	public void rawValidXML() throws IOException {
+		// Write non-XML data
+		OutputStream output = getStorageManager().getStorageProvider()
+				.openOutput("beanOne");
+		PrintWriter writer = new PrintWriter(output);
+
+		writer.println("<java class=\"java.beans.XMLDecoder\">");
+		writer.println("<object class=\"net.sf.cafemocha.persistence.SimpleBean\">");
+		writer.println("<void property=\"name\">");
+		writer.println("<string>beanOne</string>");
+		writer.println("</void>");
+		writer.println("</object>");
+		writer.println("</java>");
+		writer.flush();
+		writer.close();
+
+		SimpleBean beanOne = new SimpleBean("beanOne", 0);
+
+		// This should read successfully
+		SimpleBean readBeanOne = getStorageManager().readObject("beanOne");
+
+		// Ensure that the object is equivalent, but different
+		assertEquals(beanOne, readBeanOne);
+		assertNotSame(beanOne, readBeanOne);
+	}
+
+	@Test(expected = XMLDecodingException.class)
+	public void rawEmptyXML() throws IOException {
+		// Write non-XML data
+		OutputStream output = getStorageManager().getStorageProvider()
+				.openOutput("corrupt");
+		PrintWriter writer = new PrintWriter(output);
+
+		writer.println("<java class=\"java.beans.XMLDecoder\">");
+		writer.println("</java>");
+		writer.flush();
+		writer.close();
+
+		// This should throw exception
+		getStorageManager().readObject("corrupt");
+	}
+
+	@Test(expected = XMLDecodingException.class)
+	public void rawCorruptXML() throws IOException {
+		// Write non-XML data
+		OutputStream output = getStorageManager().getStorageProvider()
+				.openOutput("corrupt");
+		PrintWriter writer = new PrintWriter(output);
+
+		writer.println("<java class=\"java.beans.XMLDecoder\">");
+		writer.println("<object class=\"net.sf.cafemocha.persistence.SimpleBean\">");
+		writer.println("<void property=\"name\">");
+		writer.println("<string>beanOne</string>");
+		writer.println("</voidd>"); // misspelled
+		writer.println("</object>");
+		writer.println("</java>");
+		writer.flush();
+		writer.close();
+
+		// This should throw exception
+		getStorageManager().readObject("corrupt");
 	}
 
 	/**
