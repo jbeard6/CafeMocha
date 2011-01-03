@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import net.sf.cafemocha.persistence.AbstractStorageManager;
 import net.sf.cafemocha.persistence.StorageManager;
 import net.sf.cafemocha.persistence.StorageProvider;
 
@@ -34,22 +35,23 @@ import org.slf4j.LoggerFactory;
  * @author computerguy5
  * 
  */
-public class XMLStorageManager implements StorageManager {
+public class XMLStorageManager extends AbstractStorageManager {
 
 	private static final Logger LOG = LoggerFactory
 			.getLogger(XMLStorageManager.class);
 
+	/**
+	 * Construct an {@link XMLStorageManager} that uses the specified
+	 * {@link StorageProvider}.
+	 * 
+	 * @param storageProvider
+	 *            the storage provider with which objects will be written and
+	 *            read
+	 * @throws NullPointerException
+	 *             if <code>storageProvider</code> is <code>null</code>
+	 */
 	public XMLStorageManager(StorageProvider storageProvider) {
-		if (storageProvider == null) {
-			throw new NullPointerException("storageProvider");
-		}
-		this.storageProvider = storageProvider;
-	}
-
-	private final StorageProvider storageProvider;
-
-	public StorageProvider getStorageProvider() {
-		return storageProvider;
+		super(storageProvider);
 	}
 
 	private ThreadLocal<ExceptionHandler> exceptionHandler = new ThreadLocal<ExceptionHandler>() {
