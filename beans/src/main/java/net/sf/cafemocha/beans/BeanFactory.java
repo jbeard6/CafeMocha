@@ -46,7 +46,8 @@ public abstract class BeanFactory {
 		@SuppressWarnings("unchecked")
 		Class<T> cls = (Class<T>) Class.forName(className);
 
-		return cls.newInstance();
+		// Explicit cast to repair Maven no maximal instance error
+		return (T) cls.newInstance();
 	}
 
 	/**
@@ -68,7 +69,9 @@ public abstract class BeanFactory {
 			Map<String, ?> properties) throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException,
 			IntrospectionException, InvocationTargetException {
-		T instance = createInstance(className);
+		// Explicit cast to repair Maven no maximal instance error
+		@SuppressWarnings("unchecked")
+		T instance = (T) createInstance(className);
 
 		if (properties == null) {
 			return instance;
@@ -109,7 +112,11 @@ public abstract class BeanFactory {
 			IllegalAccessException {
 		String className = System.getProperty(propertyName);
 
-		return createInstance(className);
+		// Explicit cast to repair Maven no maximal instance error
+		@SuppressWarnings("unchecked")
+		T instance = (T) createInstance(className);
+
+		return instance;
 	}
 
 	/**
@@ -142,7 +149,11 @@ public abstract class BeanFactory {
 			IllegalAccessException {
 		String className = System.getProperty(propertyName, defaultClassName);
 
-		return createInstance(className);
+		// Explicit cast to repair Maven no maximal instance error
+		@SuppressWarnings("unchecked")
+		T instance = (T) createInstance(className);
+
+		return instance;
 	}
 
 	/**
@@ -180,7 +191,11 @@ public abstract class BeanFactory {
 			return defaultInstance;
 		}
 
-		return createInstance(className);
+		// Explicit cast to repair Maven no maximal instance error
+		@SuppressWarnings("unchecked")
+		T instance = (T) createInstance(className);
+
+		return instance;
 	}
 
 }
