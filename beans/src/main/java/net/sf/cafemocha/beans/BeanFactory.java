@@ -11,6 +11,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Utility class for creating instances of bean classes.
  * 
@@ -19,35 +22,51 @@ import java.util.Map.Entry;
  */
 public abstract class BeanFactory {
 
+	private static final Logger LOG = LoggerFactory
+			.getLogger(BeanFactory.class);
+
 	/**
 	 * Create an instance of the <code>className</code> class by invoking its
 	 * default constructor.
-	 * 
-	 * TODO Consolidate exceptions
 	 * 
 	 * @param <T>
 	 *            the type of object to return
 	 * @param className
 	 *            the name of the class of which to create an instance
-	 * @throws ClassNotFoundException
-	 *             if the class is not present
-	 * @throws IllegalAccessException
-	 *             if the default constructor is not accessible
-	 * @throws InstantiationException
-	 *             if an exception occurs in the instantiation of the object
+	 * @throws BeanInstantiationException
+	 *             if the class is not present, if the default constructor is
+	 *             non-existent or not accessible, or if an exception occurs in
+	 *             the instantiation of the object
 	 * @throws ClassCastException
 	 *             if the <code>className</code> class is not of type
 	 *             <code>T</code>
 	 * @return a new instance of the specified class
 	 */
 	public static <T> T createInstance(String className)
-			throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException {
-		@SuppressWarnings("unchecked")
-		Class<T> cls = (Class<T>) Class.forName(className);
+			throws BeanInstantiationException {
+		try {
+			@SuppressWarnings("unchecked")
+			Class<T> cls = (Class<T>) Class.forName(className);
 
-		// Explicit cast to repair Maven no maximal instance error
-		return (T) cls.newInstance();
+			// Explicit cast to repair Maven no maximal instance error
+			return (T) cls.newInstance();
+		} catch (ClassNotFoundException ex) {
+			String message = String.format("Class %s Not Found", className);
+			LOG.warn(message, ex);
+			throw new BeanInstantiationException(message, ex);
+		} catch (InstantiationException ex) {
+			String message = String.format(
+					"Class %s is abstract, has no default constructor, "
+							+ "or constructor raised an exception", className);
+			LOG.warn(message, ex);
+			throw new BeanInstantiationException(message, ex);
+		} catch (IllegalAccessException ex) {
+			String message = String
+					.format("Class %s default constructor is not accessible",
+							className);
+			LOG.warn(message, ex);
+			throw new BeanInstantiationException(message, ex);
+		}
 	}
 
 	/**
@@ -66,9 +85,9 @@ public abstract class BeanFactory {
 	 * @throws InvocationTargetException
 	 */
 	public static <T> T createInstance(String className,
-			Map<String, ?> properties) throws ClassNotFoundException,
-			InstantiationException, IllegalAccessException,
-			IntrospectionException, InvocationTargetException {
+			Map<String, ?> properties) throws BeanInstantiationException,
+			IllegalAccessException, IntrospectionException,
+			InvocationTargetException {
 		// Explicit cast to repair Maven no maximal instance error
 		@SuppressWarnings("unchecked")
 		T instance = (T) createInstance(className);
