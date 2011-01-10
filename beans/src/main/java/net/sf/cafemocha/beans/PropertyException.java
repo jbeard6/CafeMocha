@@ -14,6 +14,24 @@ package net.sf.cafemocha.beans;
  * 
  */
 public class PropertyException extends RuntimeException {
+	private static final long serialVersionUID = 2150600450327066400L;
+
+	/**
+	 * Construct a new {@link PropertyException}.
+	 */
+	public PropertyException() {
+	}
+
+	/**
+	 * Construct a new {@link PropertyException} with the specified
+	 * <code>message</code>.
+	 * 
+	 * @param message
+	 *            message describing the exception
+	 */
+	public PropertyException(String message) {
+		super(message);
+	}
 
 	/**
 	 * Construct a new {@link PropertyException} with the specified

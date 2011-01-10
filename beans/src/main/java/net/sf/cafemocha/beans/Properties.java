@@ -11,6 +11,9 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Utility class for getting and setting the values of Java beans.
  * 
@@ -18,6 +21,8 @@ import java.lang.reflect.Method;
  * 
  */
 public abstract class Properties {
+
+	private static final Logger LOG = LoggerFactory.getLogger(Properties.class);
 
 	/**
 	 * Returns the descriptor for the specified property of the specified class.
@@ -27,13 +32,21 @@ public abstract class Properties {
 	 * @param propertyName
 	 *            the name of the property for which to obtain the descriptor
 	 * @return the descriptor for the property
-	 * @throws IntrospectionException
-	 *             if an error occurs while introspecting the property
+	 * @throws NoSuchPropertyException
+	 *             if the specified property does not exist
 	 */
 	public static PropertyDescriptor descriptor(Class<?> beanClass,
-			String propertyName) throws IntrospectionException {
-		// TODO Cache common requests
-		return new PropertyDescriptor(propertyName, beanClass);
+			String propertyName) throws NoSuchPropertyException {
+		try {
+			// TODO Cache common requests
+			return new PropertyDescriptor(propertyName, beanClass);
+		} catch (IntrospectionException ex) {
+			if (LOG.isWarnEnabled()) {
+				LOG.warn(String.format("Property %s#%s does not exist",
+						beanClass, propertyName), ex);
+			}
+			throw new NoSuchPropertyException(beanClass, propertyName, ex);
+		}
 	}
 
 	/**
@@ -48,20 +61,30 @@ public abstract class Properties {
 	 * @param setterName
 	 *            the name of the method used to set the property value
 	 * @return the descriptor for the property
-	 * @throws IntrospectionException
-	 *             if an error occurs while introspecting the property
+	 * @throws NoSuchPropertyException
+	 *             if the specified property does not exist
 	 */
 	public static PropertyDescriptor descriptor(Class<?> beanClass,
 			String propertyName, String getterName, String setterName)
-			throws IntrospectionException {
-		// TODO Cache common requests
-		return new PropertyDescriptor(propertyName, beanClass, getterName,
-				setterName);
+			throws NoSuchPropertyException {
+		try {
+			// TODO Cache common requests
+			return new PropertyDescriptor(propertyName, beanClass, getterName,
+					setterName);
+		} catch (IntrospectionException ex) {
+			if (LOG.isWarnEnabled()) {
+				LOG.warn(String.format("Property %s#%s does not exist",
+						beanClass, propertyName), ex);
+			}
+			throw new NoSuchPropertyException(beanClass, propertyName, ex);
+		}
 	}
 
 	/**
 	 * Returns the value of the specified bean property by invoking its getter
 	 * method.
+	 * 
+	 * TODO Consolidate exceptions
 	 * 
 	 * @param <T>
 	 *            the type of object returned
@@ -70,8 +93,13 @@ public abstract class Properties {
 	 * @param propertyName
 	 *            the name of the property to read
 	 * @return the property value
-	 * @throws IntrospectionException
-	 *             if an error occurs while introspecting the property
+	 * @throws NullPointerException
+	 *             if either <code>obj</code> or <code>propertyName</code> is
+	 *             <code>null</code>
+	 * @throws NoSuchPropertyException
+	 *             if the specified property does not exist
+	 * @throws WriteOnlyPropertyException
+	 *             if the property has only a setter
 	 * @throws IllegalAccessException
 	 *             if the getter method is inaccessible
 	 * @throws InvocationTargetException
@@ -80,12 +108,15 @@ public abstract class Properties {
 	 *             if the value of the property is not of type <code>T</code>
 	 */
 	public static <T> T getValue(Object obj, String propertyName)
-			throws IntrospectionException, IllegalAccessException,
+			throws PropertyException, IllegalAccessException,
 			InvocationTargetException {
 		// Obtain the property descriptor for the given property
 		PropertyDescriptor descriptor = descriptor(obj.getClass(), propertyName);
 
 		Method readMethod = descriptor.getReadMethod();
+		if (readMethod == null) {
+			throw new WriteOnlyPropertyException(obj.getClass(), propertyName);
+		}
 
 		// ClassCastException is permissible
 		@SuppressWarnings("unchecked")
@@ -98,26 +129,37 @@ public abstract class Properties {
 	 * Sets the value of the specified bean property by invoking its setter
 	 * method.
 	 * 
+	 * TODO Consolidate exceptions
+	 * 
 	 * @param obj
 	 *            the object upon which to set the property
 	 * @param propertyName
 	 *            the name of the property to set
 	 * @param value
 	 *            the property value
-	 * @throws IntrospectionException
-	 *             if an error occurs while introspecting the property
+	 * @throws NullPointerException
+	 *             if either <code>obj</code> or <code>propertyName</code> is
+	 *             <code>null</code>
+	 * @throws NoSuchPropertyException
+	 *             if the specified property does not exist
+	 * @throws ReadOnlyPropertyException
+	 *             if the property has only a getter
 	 * @throws IllegalAccessException
 	 *             if the setter method is inaccessible
 	 * @throws InvocationTargetException
 	 *             if the setter method throws an exception
 	 */
 	public static void setValue(Object obj, String propertyName, Object value)
-			throws IntrospectionException, IllegalAccessException,
+			throws PropertyException, IllegalAccessException,
 			InvocationTargetException {
 		// Obtain the property descriptor for the given property
 		PropertyDescriptor descriptor = descriptor(obj.getClass(), propertyName);
 
 		Method writeMethod = descriptor.getWriteMethod();
+
+		if (writeMethod == null) {
+			throw new ReadOnlyPropertyException(obj.getClass(), propertyName);
+		}
 
 		writeMethod.invoke(obj, value);
 	}
