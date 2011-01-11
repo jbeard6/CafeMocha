@@ -28,10 +28,9 @@ public class WriteOnlyPropertyException extends PropertyException {
 	 */
 	public WriteOnlyPropertyException(Class<?> propertyClass,
 			String propertyName) {
-		super(String.format("Property %s of %s is write-only.", propertyName,
-				propertyClass));
-		this.propertyClass = propertyClass;
-		this.propertyName = propertyName;
+		super(propertyClass, propertyName, String
+				.format("Property %s of %s is write-only.", propertyName,
+						propertyClass));
 	}
 
 	/**
@@ -49,28 +48,9 @@ public class WriteOnlyPropertyException extends PropertyException {
 	 */
 	public WriteOnlyPropertyException(Class<?> propertyClass,
 			String propertyName, Throwable cause) {
-		super(String.format("Property %s of %s is write-only.", propertyName,
-				propertyClass), cause);
-		this.propertyClass = propertyClass;
-		this.propertyName = propertyName;
-	}
-
-	private final Class<?> propertyClass;
-
-	/**
-	 * @return the class for which the property is write-only
-	 */
-	public Class<?> getPropertyClass() {
-		return propertyClass;
-	}
-
-	private final String propertyName;
-
-	/**
-	 * @return the name of the property that is write-only
-	 */
-	public String getPropertyName() {
-		return propertyName;
+		super(propertyClass, propertyName, String
+				.format("Property %s of %s is write-only.", propertyName,
+						propertyClass), cause);
 	}
 
 }

@@ -27,10 +27,8 @@ public class ReadOnlyPropertyException extends PropertyException {
 	 *            the name of the property
 	 */
 	public ReadOnlyPropertyException(Class<?> propertyClass, String propertyName) {
-		super(String.format("Property %s of %s is read-only.", propertyName,
-				propertyClass));
-		this.propertyClass = propertyClass;
-		this.propertyName = propertyName;
+		super(propertyClass, propertyName, String.format(
+				"Property %s of %s is read-only.", propertyName, propertyClass));
 	}
 
 	/**
@@ -48,28 +46,9 @@ public class ReadOnlyPropertyException extends PropertyException {
 	 */
 	public ReadOnlyPropertyException(Class<?> propertyClass,
 			String propertyName, Throwable cause) {
-		super(String.format("Property %s of %s is read-only.", propertyName,
-				propertyClass), cause);
-		this.propertyClass = propertyClass;
-		this.propertyName = propertyName;
-	}
-
-	private final Class<?> propertyClass;
-
-	/**
-	 * @return the class for which the property is read-only
-	 */
-	public Class<?> getPropertyClass() {
-		return propertyClass;
-	}
-
-	private final String propertyName;
-
-	/**
-	 * @return the name of the property that is read-only
-	 */
-	public String getPropertyName() {
-		return propertyName;
+		super(propertyClass, propertyName,
+				String.format("Property %s of %s is read-only.", propertyName,
+						propertyClass), cause);
 	}
 
 }
