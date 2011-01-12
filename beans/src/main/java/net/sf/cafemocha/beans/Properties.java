@@ -84,8 +84,6 @@ public abstract class Properties {
 	 * Returns the value of the specified bean property by invoking its getter
 	 * method.
 	 * 
-	 * TODO Consolidate exceptions
-	 * 
 	 * @param <T>
 	 *            the type of object returned
 	 * @param obj
@@ -100,16 +98,15 @@ public abstract class Properties {
 	 *             if the specified property does not exist
 	 * @throws WriteOnlyPropertyException
 	 *             if the property has only a setter
-	 * @throws IllegalAccessException
+	 * @throws InaccessiblePropertyException
 	 *             if the getter method is inaccessible
-	 * @throws InvocationTargetException
+	 * @throws GetPropertyException
 	 *             if the getter method throws an exception
 	 * @throws ClassCastException
 	 *             if the value of the property is not of type <code>T</code>
 	 */
 	public static <T> T getValue(Object obj, String propertyName)
-			throws PropertyException, IllegalAccessException,
-			InvocationTargetException {
+			throws PropertyException {
 		// Obtain the property descriptor for the given property
 		PropertyDescriptor descriptor = descriptor(obj.getClass(), propertyName);
 
@@ -118,11 +115,21 @@ public abstract class Properties {
 			throw new WriteOnlyPropertyException(obj.getClass(), propertyName);
 		}
 
-		// ClassCastException is permissible
-		@SuppressWarnings("unchecked")
-		T value = (T) readMethod.invoke(obj);
+		try {
+			// ClassCastException is permissible
+			@SuppressWarnings("unchecked")
+			T value = (T) readMethod.invoke(obj);
 
-		return value;
+			return value;
+		} catch (IllegalAccessException ex) {
+			String message = String.format("Property %s#%s is inaccessible.",
+					obj.getClass(), propertyName);
+			LOG.warn(message, ex);
+			throw new InaccessiblePropertyException(obj.getClass(),
+					propertyName, "Property is inaccessible.", ex);
+		} catch (InvocationTargetException ex) {
+			throw new GetPropertyException(obj.getClass(), propertyName, ex);
+		}
 	}
 
 	/**
@@ -144,14 +151,16 @@ public abstract class Properties {
 	 *             if the specified property does not exist
 	 * @throws ReadOnlyPropertyException
 	 *             if the property has only a getter
-	 * @throws IllegalAccessException
+	 * @throws InaccessiblePropertyException
 	 *             if the setter method is inaccessible
-	 * @throws InvocationTargetException
+	 * @throws SetPropertyException
 	 *             if the setter method throws an exception
+	 * @throws IllegalArgumentException
+	 *             if the specified <code>value</code> is not compatible with
+	 *             the property setter
 	 */
 	public static void setValue(Object obj, String propertyName, Object value)
-			throws PropertyException, IllegalAccessException,
-			InvocationTargetException {
+			throws PropertyException {
 		// Obtain the property descriptor for the given property
 		PropertyDescriptor descriptor = descriptor(obj.getClass(), propertyName);
 
@@ -161,6 +170,18 @@ public abstract class Properties {
 			throw new ReadOnlyPropertyException(obj.getClass(), propertyName);
 		}
 
-		writeMethod.invoke(obj, value);
+		try {
+			writeMethod.invoke(obj, value);
+		} catch (IllegalArgumentException ex) {
+
+		} catch (IllegalAccessException ex) {
+			String message = String.format("Property %s#%s is inaccessible.",
+					obj.getClass(), propertyName);
+			LOG.warn(message, ex);
+			throw new InaccessiblePropertyException(obj.getClass(),
+					propertyName, "Property is inaccessible.", ex);
+		} catch (InvocationTargetException ex) {
+			throw new SetPropertyException(obj.getClass(), propertyName, ex);
+		}
 	}
 }
