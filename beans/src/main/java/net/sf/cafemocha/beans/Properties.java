@@ -136,8 +136,6 @@ public abstract class Properties {
 	 * Sets the value of the specified bean property by invoking its setter
 	 * method.
 	 * 
-	 * TODO Consolidate exceptions
-	 * 
 	 * @param obj
 	 *            the object upon which to set the property
 	 * @param propertyName
@@ -172,8 +170,6 @@ public abstract class Properties {
 
 		try {
 			writeMethod.invoke(obj, value);
-		} catch (IllegalArgumentException ex) {
-
 		} catch (IllegalAccessException ex) {
 			String message = String.format("Property %s#%s is inaccessible.",
 					obj.getClass(), propertyName);
