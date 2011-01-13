@@ -6,8 +6,6 @@
  */
 package net.sf.cafemocha.beans;
 
-import java.beans.IntrospectionException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -33,6 +31,7 @@ public abstract class BeanFactory {
 	 *            the type of object to return
 	 * @param className
 	 *            the name of the class of which to create an instance
+	 * @return a new instance of the specified class
 	 * @throws BeanInstantiationException
 	 *             if the class is not present, if the default constructor is
 	 *             non-existent or not accessible, or if an exception occurs in
@@ -40,7 +39,6 @@ public abstract class BeanFactory {
 	 * @throws ClassCastException
 	 *             if the <code>className</code> class is not of type
 	 *             <code>T</code>
-	 * @return a new instance of the specified class
 	 */
 	public static <T> T createInstance(String className)
 			throws BeanInstantiationException {
@@ -70,24 +68,39 @@ public abstract class BeanFactory {
 	}
 
 	/**
-	 * TODO Consolidate exceptions
-	 * 
-	 * TODO Complete Javadoc
+	 * Create an instance of the <code>className</code> class by invoking its
+	 * default constructor and initializing the specified property values.
 	 * 
 	 * @param <T>
+	 *            the type of object to return
 	 * @param className
+	 *            the name of the class of which to create an instance
 	 * @param properties
-	 * @return
-	 * @throws ClassNotFoundException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws IntrospectionException
-	 * @throws InvocationTargetException
+	 *            mapping of property names to the initial values to set on the
+	 *            new instance
+	 * @return a new instance of the specified class with the specified
+	 *         properties set
+	 * @throws BeanInstantiationException
+	 *             if the class is not present, if the default constructor is
+	 *             non-existent or not accessible, or if an exception occurs in
+	 *             the instantiation of the object
+	 * @throws ClassCastException
+	 *             if the <code>className</code> class is not of type
+	 *             <code>T</code>
+	 * @throws NoSuchPropertyException
+	 *             if the specified property does not exist
+	 * @throws ReadOnlyPropertyException
+	 *             if the property has only a getter
+	 * @throws InaccessiblePropertyException
+	 *             if the setter method is inaccessible
+	 * @throws SetPropertyException
+	 *             if the setter method throws an exception
+	 * @throws IllegalArgumentException
+	 *             if a property value is not compatible with its setter
 	 */
 	public static <T> T createInstance(String className,
 			Map<String, ?> properties) throws BeanInstantiationException,
-			IllegalAccessException, IntrospectionException,
-			InvocationTargetException {
+			PropertyException {
 		// Explicit cast to repair Maven no maximal instance error
 		@SuppressWarnings("unchecked")
 		T instance = (T) createInstance(className);

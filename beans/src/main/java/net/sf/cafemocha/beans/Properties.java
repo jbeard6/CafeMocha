@@ -38,7 +38,7 @@ public abstract class Properties {
 	public static PropertyDescriptor descriptor(Class<?> beanClass,
 			String propertyName) throws NoSuchPropertyException {
 		try {
-			// TODO Cache common requests
+			// TBD Cache common requests
 			return new PropertyDescriptor(propertyName, beanClass);
 		} catch (IntrospectionException ex) {
 			if (LOG.isWarnEnabled()) {
@@ -68,7 +68,7 @@ public abstract class Properties {
 			String propertyName, String getterName, String setterName)
 			throws NoSuchPropertyException {
 		try {
-			// TODO Cache common requests
+			// TBD Cache common requests
 			return new PropertyDescriptor(propertyName, beanClass, getterName,
 					setterName);
 		} catch (IntrospectionException ex) {
