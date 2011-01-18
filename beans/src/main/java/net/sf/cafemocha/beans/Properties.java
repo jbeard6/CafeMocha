@@ -10,6 +10,8 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -178,6 +180,41 @@ public abstract class Properties {
 					propertyName, "Property is inaccessible.", ex);
 		} catch (InvocationTargetException ex) {
 			throw new SetPropertyException(obj.getClass(), propertyName, ex);
+		}
+	}
+
+	/**
+	 * Set the properties named according to the keys in the {@link Map} to the
+	 * corresponding values.
+	 * 
+	 * @param obj
+	 *            the object on which to set the property values
+	 * @param values
+	 *            the property name to value mapping
+	 * @throws NullPointerException
+	 *             if either <code>obj</code> or <code>values</code> is
+	 *             <code>null</code>
+	 * @throws NoSuchPropertyException
+	 *             if a specified property does not exist
+	 * @throws ReadOnlyPropertyException
+	 *             if a property has only a getter
+	 * @throws InaccessiblePropertyException
+	 *             if a setter method is inaccessible
+	 * @throws SetPropertyException
+	 *             if a setter method throws an exception
+	 * @throws IllegalArgumentException
+	 *             if a specified property value is not compatible with the
+	 *             property setter
+	 */
+	public static void setValues(Object obj, Map<String, Object> values)
+			throws PropertyException {
+		// Initialize the value of all of the properties
+		for (Entry<String, ?> entry : values.entrySet()) {
+			String propertyName = entry.getKey();
+			Object value = entry.getValue();
+
+			setValue(obj, propertyName, value);
+			LOG.debug("Set property {} to {}", propertyName, value);
 		}
 	}
 }
