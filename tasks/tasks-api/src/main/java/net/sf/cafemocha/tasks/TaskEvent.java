@@ -113,6 +113,16 @@ public class TaskEvent<T> extends EventObject {
 		this.value = value;
 	}
 
+	/*
+	 * Specifying covariant return type.
+	 * 
+	 * @see java.util.EventObject#getSource()
+	 */
+	@Override
+	public Task<?> getSource() {
+		return (Task<?>) super.getSource();
+	}
+
 	private final T value;
 
 	/**

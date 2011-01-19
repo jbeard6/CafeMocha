@@ -34,7 +34,7 @@ public enum ExecutionState {
 	CANCELED,
 
 	/**
-	 * The {@link Task} has terminated unsucessfully.
+	 * The {@link Task} has terminated unsuccessfully.
 	 */
 	FAILED,
 

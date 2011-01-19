@@ -6,110 +6,44 @@
  */
 package net.sf.cafemocha.tasks;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 /**
- * Asynchronously executes {@link Task Tasks}.
+ * A service to which {@link Task Tasks} may be submitted for asynchronous
+ * execution.
  * 
  * @author computerguy5
  * 
  */
-public class TaskService {
-
-	private static final int CORE_POOL_SIZE_DEFAULT = 3;
-
-	private static final int MAXIMUM_POOL_SIZE_DEFAULT = 10;
-
-	private static final long KEEP_ALIVE_DEFAULT = 1L;
-
-	private static final TimeUnit KEEP_ALIVE_TIME_UNIT_DEFAULT = TimeUnit.SECONDS;
-
-	public TaskService() {
-		this(new ThreadPoolExecutor(CORE_POOL_SIZE_DEFAULT,
-				MAXIMUM_POOL_SIZE_DEFAULT, KEEP_ALIVE_DEFAULT,
-				KEEP_ALIVE_TIME_UNIT_DEFAULT,
-				new LinkedBlockingQueue<Runnable>()));
-	}
-
-	public TaskService(ExecutorService executorService) {
-		if (executorService == null) {
-			throw new NullPointerException("executorService");
-		}
-		this.executorService = executorService;
-		this.tasks = new CopyOnWriteArrayList<Task<?>>();
-	}
-
-	private final ExecutorService executorService;
-
-	private final List<Task<?>> tasks;
-
-	public void execute(Task<?> task) {
-		if (task == null) {
-			throw new NullPointerException("task");
-		} else if (task.getTaskService() != null) {
-			throw new IllegalArgumentException("Task already queued.");
-		}
-
-		task.setTaskService(this);
-		tasks.add(task);
-
-		// TODO executorService.submit(task)
-	}
+public interface TaskService {
 
 	/**
-	 * Initiates an orderly shutdown in which previously submitted tasks are
-	 * executed, but no new tasks will be accepted. Invocation has no additional
-	 * effect if already shut down.
+	 * Schedule the specified {@link Task} for execution.
+	 * 
+	 * @param task
+	 *            the task to be executed
 	 */
-	public void shutdown() {
-		executorService.shutdown();
-	}
-
-	// TODO public List<Task> shutdownNow() {}
+	public void execute(Task<?> task);
 
 	/**
-	 * Blocks until all {@link Task Tasks} have completed execution after a
-	 * shutdown request, or the timeout occurs, or the current thread is
-	 * interrupted, whichever happens first.
-	 * 
-	 * @param timeout
-	 *            the maximum time to wait
-	 * @param unit
-	 *            the time unit of the timeout argument
-	 * @return <code>true</code> if this executor terminated and false if the
-	 *         timeout elapsed before termination
-	 * @throws InterruptedException
-	 *             if interrupted while waiting
+	 * Initiates an orderly shutdown in which previously submitted {@link Task
+	 * Tasks} are executed, but no new tasks will be accepted. Invocation has
+	 * nod additional effect if already shut down.
 	 */
-	public boolean awaitTermination(long timeout, TimeUnit unit)
-			throws InterruptedException {
-		return executorService.awaitTermination(timeout, unit);
-	}
+	public void shutdown();
 
 	/**
-	 * Returns <code>true</code> if this {@link TaskService} has been shut down.
+	 * Returns <code>true</code> if this {@link TaskService} has been
+	 * {@link #shutdown()}.
 	 * 
-	 * 
-	 * @return <code>true</code> if this task service has been shut down
+	 * @return <code>true</code> if this task service is shutdown
 	 */
-	public boolean isShutdown() {
-		return executorService.isShutdown();
-	}
+	public boolean isShutdown();
 
 	/**
-	 * Returns true if all {@link Task Tasks} have completed following shutdown.
-	 * Note that isTerminated is never true unless {@link #shutdown()} was
-	 * called first.
+	 * Returns <code>true</code> if this {@link TaskService} has been
+	 * {@link #shutdown()} and all {@link Task Tasks} have completed execution.
 	 * 
-	 * @return <code>true</code> if all tasks have completed following shut down
+	 * @return <code>true</code> if all task execution has terminated
 	 */
-	public boolean isTerminated() {
-		return executorService.isTerminated();
-	}
+	public boolean isTerminated();
 
 }

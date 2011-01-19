@@ -24,30 +24,30 @@ public abstract class Task<T> extends AbstractObservable {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Task.class);
 
-	private TaskService taskService;
+	private ExecutorServiceTaskService taskService;
 
 	/**
-	 * Returns the {@link TaskService} to which this {@link Task} has been
+	 * Returns the {@link ExecutorServiceTaskService} to which this {@link Task} has been
 	 * submitted. This property is cleared once the {@link Task} has completed.
 	 * 
 	 * This is a read-only bound property.
 	 * 
 	 * @return the task service to which this task has been submitted
 	 */
-	public synchronized TaskService getTaskService() {
+	public synchronized ExecutorServiceTaskService getTaskService() {
 		return taskService;
 	}
 
 	/**
-	 * Set the {@link TaskService} that is or will execute this {@link Task}.
+	 * Set the {@link ExecutorServiceTaskService} that is or will execute this {@link Task}.
 	 * 
 	 * @param taskService
 	 *            the task service that will execute this task
 	 */
-	void setTaskService(TaskService taskService) {
+	void setTaskService(ExecutorServiceTaskService taskService) {
 		assert taskService != null : "null TaskService";
 
-		TaskService oldValue;
+		ExecutorServiceTaskService oldValue;
 		synchronized (this) {
 			oldValue = this.taskService;
 			this.taskService = taskService;
