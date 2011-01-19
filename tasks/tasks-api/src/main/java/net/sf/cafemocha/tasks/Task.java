@@ -104,7 +104,7 @@ public abstract class Task<T> extends AbstractObservable {
 
 	void fireStarted() {
 		TaskEvent<Void> event = TaskEvent.started(this);
-		LOG.debug("fireing started event: {}", event);
+		LOG.debug("firing started event: {}", event);
 		for (TaskListener<? super T> listener : listeners) {
 			listener.started(event);
 		}
@@ -113,7 +113,7 @@ public abstract class Task<T> extends AbstractObservable {
 	void fireInterrupted(InterruptedException exception) {
 		TaskEvent<InterruptedException> event = TaskEvent.interrupted(this,
 				exception);
-		LOG.debug("fireing interrupted event: {}", event);
+		LOG.debug("firing interrupted event: {}", event);
 		for (TaskListener<? super T> listener : listeners) {
 			listener.interrupted(event);
 		}
@@ -121,7 +121,7 @@ public abstract class Task<T> extends AbstractObservable {
 
 	void fireCanceled() {
 		TaskEvent<Void> event = TaskEvent.started(this);
-		LOG.debug("fireing canceled event: {}", event);
+		LOG.debug("firing canceled event: {}", event);
 		for (TaskListener<? super T> listener : listeners) {
 			listener.canceled(event);
 		}
@@ -129,7 +129,7 @@ public abstract class Task<T> extends AbstractObservable {
 
 	void fireFailed(Throwable exception) {
 		TaskEvent<Throwable> event = TaskEvent.failed(this, exception);
-		LOG.debug("fireing failed event: {}", event);
+		LOG.debug("firing failed event: {}", event);
 		for (TaskListener<? super T> listener : listeners) {
 			listener.failed(event);
 		}
@@ -137,7 +137,7 @@ public abstract class Task<T> extends AbstractObservable {
 
 	void fireSucceeded(T value) {
 		TaskEvent<T> event = TaskEvent.succeeded(this, value);
-		LOG.debug("fireing succeeded event: {}", event);
+		LOG.debug("firing succeeded event: {}", event);
 		for (TaskListener<? super T> listener : listeners) {
 			listener.succeeded(event);
 		}
@@ -145,7 +145,7 @@ public abstract class Task<T> extends AbstractObservable {
 
 	void fireFinished() {
 		TaskEvent<Void> event = TaskEvent.finished(this);
-		LOG.debug("fireing finished event: {}", event);
+		LOG.debug("firing finished event: {}", event);
 		for (TaskListener<? super T> listener : listeners) {
 			listener.finished(event);
 		}
