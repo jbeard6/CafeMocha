@@ -18,10 +18,12 @@ public interface TaskService {
 	/**
 	 * Schedule the specified {@link Task} for execution.
 	 * 
+	 * @param <T>
+	 *            the type of result returned by the task
 	 * @param task
 	 *            the task to be executed
 	 */
-	public void execute(Task<?> task);
+	public <T> void execute(Task<T> task);
 
 	/**
 	 * Initiates an orderly shutdown in which previously submitted {@link Task

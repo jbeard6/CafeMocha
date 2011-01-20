@@ -6,6 +6,7 @@
  */
 package net.sf.cafemocha.examples.console;
 
+import static java.util.concurrent.Executors.newSingleThreadExecutor;
 import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 
 import java.util.ArrayList;
@@ -14,7 +15,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import net.sf.cafemocha.application.Application;
+import net.sf.cafemocha.tasks.ExecutorServiceTaskService;
 import net.sf.cafemocha.tasks.Task;
+import net.sf.cafemocha.tasks.TaskService;
 
 /**
  * An example application that executes at the system console.
@@ -54,19 +57,13 @@ public class ConsoleApplication extends Application {
 
 	private final List<Task<?>> tasks;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * net.sf.cafemocha.application.Application#initialize(java.lang.String[])
-	 */
 	@Override
 	protected void initialize(String... arguments) {
-		int taskCount = 100;
+		long taskCount = 100;
 
 		try {
 			if (arguments != null && arguments.length > 0) {
-				taskCount = Integer.valueOf(arguments[0]);
+				taskCount = Long.valueOf(arguments[0]);
 			}
 		} catch (NumberFormatException ex) {
 			System.err.println("Invalid Argument (Integer expected): "
@@ -80,6 +77,11 @@ public class ConsoleApplication extends Application {
 
 		// Register an exit listener
 		addExitListener(new ConsoleExitListener());
+
+		TaskService service = new ExecutorServiceTaskService(
+				newSingleThreadExecutor());
+
+		getContext().setTaskService(service);
 	}
 
 	@Override
@@ -91,7 +93,11 @@ public class ConsoleApplication extends Application {
 	protected void ready() {
 		System.out.println("Application Ready");
 
-		// TODO Launch tasks
+		// Launch tasks
+		TaskService taskService = getContext().getTaskService();
+		for (Task<?> task : tasks) {
+			taskService.execute(task);
+		}
 	}
 
 	@Override

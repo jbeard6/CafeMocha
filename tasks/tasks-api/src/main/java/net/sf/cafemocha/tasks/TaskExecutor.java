@@ -6,6 +6,7 @@
  */
 package net.sf.cafemocha.tasks;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * @author computerguy5
  * 
  */
-public class TaskExecutor<T> implements Runnable {
+public final class TaskExecutor<T> implements Runnable {
 
 	private static final Logger LOG = LoggerFactory
 			.getLogger(TaskExecutor.class);
@@ -33,8 +34,15 @@ public class TaskExecutor<T> implements Runnable {
 	 *             <code>null</code>
 	 */
 	public TaskExecutor(TaskService taskService, Task<T> task) {
+		if (taskService == null) {
+			throw new NullPointerException("taskService");
+		} else if (task == null) {
+			throw new NullPointerException("task");
+		}
+
 		this.taskService = taskService;
 		this.task = task;
+		this.context = new TaskExecutionContextImpl<T>(task);
 	}
 
 	private final TaskService taskService;
@@ -70,23 +78,29 @@ public class TaskExecutor<T> implements Runnable {
 		return result;
 	}
 
+	/**
+	 * Use the implementation as the defined type so that we can fire the
+	 * events, etc.
+	 */
+	private final TaskExecutionContextImpl<T> context;
+
 	public void run() {
 		LOG.trace("ENTER");
 
 		try {
-			// TODO started = System.currentTimeMillis();
-			// TODO fireStarted();
+			context.started();
+			context.fireStarted();
 
-			result = task.execute();
+			result = task.execute(context);
 
-			// TODO fireSuccess(result);
+			context.fireSucceeded(result);
 		} catch (InterruptedException ex) {
-			// TODO fireInterrupted(ex);
+			context.fireInterrupted(ex);
 		} catch (Exception ex) {
-			// TODO fireFailed(ex);
+			context.fireFailed(ex);
 		} finally {
-			// TODO fireFinished();
-			// TODO finished = System.currentTimeMillis();
+			context.fireFinished();
+			context.finished();
 		}
 	}
 

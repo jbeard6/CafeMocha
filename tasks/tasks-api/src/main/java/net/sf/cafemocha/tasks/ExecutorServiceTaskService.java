@@ -6,8 +6,6 @@
  */
 package net.sf.cafemocha.tasks;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -24,24 +22,20 @@ public class ExecutorServiceTaskService implements TaskService {
 			throw new NullPointerException("executorService");
 		}
 		this.executorService = executorService;
-		this.tasks = new CopyOnWriteArrayList<Task<?>>();
 	}
 
 	private final ExecutorService executorService;
 
-	private final List<Task<?>> tasks;
-
-	public void execute(Task<?> task) {
+	public <T> void execute(Task<T> task) {
 		if (task == null) {
 			throw new NullPointerException("task");
-		} else if (task.getTaskService() != null) {
-			throw new IllegalArgumentException("Task already queued.");
 		}
 
-		task.setTaskService(this);
-		tasks.add(task);
+		// Create an executor that defines the lifecycle of the task
+		TaskExecutor<T> executor = new TaskExecutor<T>(this, task);
 
-		// TODO executorService.submit(task)
+		// Submit the executor runnable to the executor service
+		executorService.submit(executor);
 	}
 
 	/**
@@ -52,8 +46,6 @@ public class ExecutorServiceTaskService implements TaskService {
 	public void shutdown() {
 		executorService.shutdown();
 	}
-
-	// TODO public List<Task> shutdownNow() {}
 
 	/**
 	 * Blocks until all {@link Task Tasks} have completed execution after a

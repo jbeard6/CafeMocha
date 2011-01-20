@@ -9,6 +9,8 @@ package net.sf.cafemocha.tasks;
 /**
  * A context to describe the current state of a {@link Task} execution.
  * 
+ * @param <T>
+ *            the type of result returned by the task
  * @author computerguy5
  * 
  */

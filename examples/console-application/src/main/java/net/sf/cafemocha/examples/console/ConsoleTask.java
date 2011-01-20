@@ -7,6 +7,7 @@
 package net.sf.cafemocha.examples.console;
 
 import net.sf.cafemocha.tasks.Task;
+import net.sf.cafemocha.tasks.TaskExecutionContext;
 
 /**
  * Outputs a string to the console.
@@ -14,7 +15,7 @@ import net.sf.cafemocha.tasks.Task;
  * @author computerguy5
  * 
  */
-public class ConsoleTask extends Task<Void> {
+public class ConsoleTask implements Task<Void> {
 
 	public ConsoleTask(int count) {
 		this.count = count;
@@ -27,9 +28,8 @@ public class ConsoleTask extends Task<Void> {
 		return "Task " + count;
 	}
 
-	@Override
-	protected Void execute() throws Exception {
-		System.out.println(toString());
+	public Void execute(TaskExecutionContext<Void> context) {
+		System.out.println(this);
 		return null;
 	}
 
