@@ -15,9 +15,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import net.sf.cafemocha.application.Application;
-import net.sf.cafemocha.tasks.ExecutorServiceTaskService;
 import net.sf.cafemocha.tasks.Task;
 import net.sf.cafemocha.tasks.TaskService;
+import net.sf.cafemocha.tasks.impl.ExecutorServiceTaskService;
 
 /**
  * An example application that executes at the system console.
