@@ -6,7 +6,6 @@
  */
 package net.sf.cafemocha.tasks;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,6 +91,8 @@ public final class TaskExecutor<T> implements Runnable {
 			context.fireStarted();
 
 			result = task.execute(context);
+
+			// TODO When is canceled fired?
 
 			context.fireSucceeded(result);
 		} catch (InterruptedException ex) {

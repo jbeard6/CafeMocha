@@ -4,13 +4,18 @@
  * $LastChangedDate$
  * $LastChangedBy$
  */
-package net.sf.cafemocha.tasks;
+package net.sf.cafemocha.tasks.impl;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import net.sf.cafemocha.tasks.Task;
+import net.sf.cafemocha.tasks.TaskExecutor;
+import net.sf.cafemocha.tasks.TaskService;
+
 /**
- * Asynchronously executes {@link Task Tasks}.
+ * A {@link TaskService} that executes {@link Task Tasks} using an
+ * {@link ExecutorService}.
  * 
  * @author computerguy5
  * 
@@ -38,11 +43,6 @@ public class ExecutorServiceTaskService implements TaskService {
 		executorService.submit(executor);
 	}
 
-	/**
-	 * Initiates an orderly shutdown in which previously submitted tasks are
-	 * executed, but no new tasks will be accepted. Invocation has no additional
-	 * effect if already shut down.
-	 */
 	public void shutdown() {
 		executorService.shutdown();
 	}
@@ -66,24 +66,10 @@ public class ExecutorServiceTaskService implements TaskService {
 		return executorService.awaitTermination(timeout, unit);
 	}
 
-	/**
-	 * Returns <code>true</code> if this {@link ExecutorServiceTaskService} has
-	 * been shut down.
-	 * 
-	 * 
-	 * @return <code>true</code> if this task service has been shut down
-	 */
 	public boolean isShutdown() {
 		return executorService.isShutdown();
 	}
 
-	/**
-	 * Returns true if all {@link Task Tasks} have completed following shutdown.
-	 * Note that isTerminated is never true unless {@link #shutdown()} was
-	 * called first.
-	 * 
-	 * @return <code>true</code> if all tasks have completed following shut down
-	 */
 	public boolean isTerminated() {
 		return executorService.isTerminated();
 	}
