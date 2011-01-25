@@ -13,7 +13,7 @@ import java.util.EventObject;
  * Receives notifications that the {@link Application} intends to exit and
  * provides an opportunity for the exit to be vetoed.
  * 
- * @author joseph
+ * @author computerguy5
  * 
  */
 public interface ExitListener extends EventListener {

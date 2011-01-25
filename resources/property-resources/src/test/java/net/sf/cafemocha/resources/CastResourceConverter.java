@@ -9,7 +9,7 @@ package net.sf.cafemocha.resources;
 /**
  * A mock {@link ResourceConverter} that performs a naive cast.
  * 
- * @author BEARDJ1
+ * @author computerguy5
  * 
  */
 public class CastResourceConverter<F, T> implements ResourceConverter<F, T> {

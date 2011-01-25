@@ -12,7 +12,7 @@ import static net.sf.cafemocha.resources.CastResourceConverter.cast;
  * This is a mocked {@link ResourceConverterFactory} that returns a
  * {@link ResourceConverter} that performs a simple cast.
  * 
- * @author BEARDJ1
+ * @author computerguy5
  * 
  */
 public class MockResourceConverterFactory implements ResourceConverterFactory {

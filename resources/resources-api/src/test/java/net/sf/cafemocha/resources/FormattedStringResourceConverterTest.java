@@ -37,11 +37,6 @@ public class FormattedStringResourceConverterTest {
 
 	private FormattedStringResourceConverter converter;
 
-	/**
-	 * Test method for
-	 * {@link net.sf.cafemocha.resources.FormattedStringResourceConverter#convert(net.josephbeard.resources.ResourceMap, java.lang.String)}
-	 * .
-	 */
 	@Test
 	public void testConvert() {
 		// Basic replacement
