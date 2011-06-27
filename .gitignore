@@ -1,33 +1,7 @@
+.metadata
+.classpath
+.project
+.settings
+target
+*.launch
 
-# /
-/.metadata
-
-# /application/
-/application/target
-
-# /beans/
-/beans/target
-
-# /examples/console-application/
-/examples/console-application/target
-
-# /examples/swing-application/
-/examples/swing-application/target
-
-# /persistence/persistence-api/
-/persistence/persistence-api/target
-
-# /resources/property-resources/
-/resources/property-resources/target
-
-# /resources/resources-api/
-/resources/resources-api/target
-
-# /swing-application/
-/swing-application/target
-
-# /tasks/tasks-api/
-/tasks/tasks-api/target
-
-# /validation/validation-api/
-/validation/validation-api/target
